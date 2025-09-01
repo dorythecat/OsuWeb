@@ -10,7 +10,8 @@ import { Application, Graphics } from "pixi.js";
   // Append the application canvas to the document body
   document.getElementById("pixi-container").appendChild(app.canvas);
 
-  const circle = new Graphics().circle(50, 50, 50).fill("#000000");
+  const circle = new Graphics().circle(100, 100, 50).fill("#000000");
+  const cutout = new Graphics();
 
   circle.eventMode = "static";
   circle.cursor = "pointer";
@@ -26,4 +27,10 @@ import { Application, Graphics } from "pixi.js";
   });
 
   app.stage.addChild(circle);
+
+  let time = 0;
+  app.ticker.add((ticker) => {
+    time += ticker.deltaTime / 10;
+    circle.alpha = Math.sin(time);
+  });
 })();
