@@ -15,5 +15,15 @@ import { Application, Graphics } from "pixi.js";
   circle.eventMode = "static";
   circle.cursor = "pointer";
 
+  circle.on('pointerdown', (event) => {
+      circle.scale.set(0.5, 0.5);
+  }, circle);
+
+  app.stage.eventMode = 'static';
+  app.stage.hitArea = app.screen;
+  app.stage.on('pointerup', (event) => {
+      circle.scale.set(1, 1);
+  });
+
   app.stage.addChild(circle);
 })();
