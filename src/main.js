@@ -21,8 +21,8 @@ import { Application, Graphics } from "pixi.js";
 
       // Set the pivot so it's in the center of the circle, and translate the circle back to its position
       circle.pivot.set(x, y);
-      circle.x = x
-      circle.y = y
+      circle.x = x;
+      circle.y = y;
 
       circle.on('pointerdown', () => {
           circle.scale.set(0.5, 0.5);
@@ -34,14 +34,20 @@ import { Application, Graphics } from "pixi.js";
       const corona = new Graphics()
           .circle(x, y, radius + 15).fill("#000000")
           .circle(x, y, radius + 10).cut();
+      corona.pivot.set(x, y);
+      corona.x = x;
+      corona.y = y;
 
 
       let timing = 10;
       function time(ticker) {
           timing -= ticker.deltaTime / 10;
+          corona.scale.set(timing / 5 + 0.8, timing / 5 + 0.8);
           if (timing <= 0) {
               timing = 0;
               app.ticker.remove(time);
+              circle.destroy();
+              corona.destroy();
           }
       }
 
