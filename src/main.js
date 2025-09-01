@@ -10,6 +10,9 @@ import { Application, Graphics } from "pixi.js";
   // Append the application canvas to the document body
   document.getElementById("pixi-container").appendChild(app.canvas);
 
+    app.stage.eventMode = 'static';
+    app.stage.hitArea = app.screen;
+
   function addCircle(radius, x, y) {
       const circle = new Graphics().circle(x, y, radius).fill("#000000");
 
@@ -24,9 +27,6 @@ import { Application, Graphics } from "pixi.js";
       circle.on('pointerdown', () => {
           circle.scale.set(0.5, 0.5);
       });
-
-      app.stage.eventMode = 'static';
-      app.stage.hitArea = app.screen;
       app.stage.on('pointerup', () => {
           circle.scale.set(1, 1);
       });
