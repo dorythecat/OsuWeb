@@ -31,6 +31,16 @@ import { Application, Graphics } from "pixi.js";
           circle.scale.set(1, 1);
       });
 
+      let timing = 10;
+      function time(ticker) {
+          timing -= ticker.deltaTime / 10;
+          if (timing <= 0) {
+              timing = 0;
+              app.ticker.remove(time);
+          }
+      }
+
+      app.ticker.add(time);
       app.stage.addChild(circle);
   }
 
