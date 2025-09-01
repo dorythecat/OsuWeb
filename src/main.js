@@ -31,6 +31,11 @@ import { Application, Graphics } from "pixi.js";
           circle.scale.set(1, 1);
       });
 
+      const corona = new Graphics()
+          .circle(x, y, radius + 15).fill("#000000")
+          .circle(x, y, radius + 10).cut();
+
+
       let timing = 10;
       function time(ticker) {
           timing -= ticker.deltaTime / 10;
@@ -42,6 +47,7 @@ import { Application, Graphics } from "pixi.js";
 
       app.ticker.add(time);
       app.stage.addChild(circle);
+      app.stage.addChild(corona);
   }
 
   addCircle(50, 100, 100);
