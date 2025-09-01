@@ -11,7 +11,6 @@ import { Application, Graphics } from "pixi.js";
   document.getElementById("pixi-container").appendChild(app.canvas);
 
   const circle = new Graphics().circle(100, 100, 50).fill("#000000");
-  const cutout = new Graphics();
 
   circle.eventMode = "static";
   circle.cursor = "pointer";
