@@ -15,6 +15,11 @@ import { Application, Graphics } from "pixi.js";
   circle.eventMode = "static";
   circle.cursor = "pointer";
 
+  // Set the pivot so it's in the center of the circle, and translate the circle back to its position
+  circle.pivot.set(circle.width, circle.height);
+  circle.x = circle.x + circle.width / 2;
+  circle.y = circle.y + circle.height / 2;
+
   circle.on('pointerdown', () => {
       circle.scale.set(0.5, 0.5);
   }, circle);
