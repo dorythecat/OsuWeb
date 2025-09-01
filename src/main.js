@@ -12,5 +12,8 @@ import { Application, Graphics } from "pixi.js";
 
   const circle = new Graphics().circle(50, 50, 50).fill("#000000");
 
+  circle.eventMode = "static";
+  circle.cursor = "pointer";
+
   app.stage.addChild(circle);
 })();
