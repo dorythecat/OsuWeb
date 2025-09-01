@@ -13,7 +13,7 @@ import { Application, Graphics } from "pixi.js";
     app.stage.eventMode = 'static';
     app.stage.hitArea = app.screen;
 
-  function addCircle(radius, x, y) {
+  function addCircle(radius, x, y, appearTime, disappearTime) {
       const circle = new Graphics().circle(x, y, radius).fill("#000000");
 
       circle.eventMode = "static";
@@ -39,9 +39,15 @@ import { Application, Graphics } from "pixi.js";
       corona.y = y;
 
 
-      let timing = 10;
+      let timing = disappearTime + appearTime;
+      let added = false;
       function time(ticker) {
           timing -= ticker.deltaTime / 10;
+          if (timing <= disappearTime && !added) {
+              app.stage.addChild(circle);
+              app.stage.addChild(corona);
+              added = true;
+          }
           corona.scale.set(timing / 5 + 0.8, timing / 5 + 0.8);
           if (timing <= 0) {
               timing = 0;
@@ -52,9 +58,7 @@ import { Application, Graphics } from "pixi.js";
       }
 
       app.ticker.add(time);
-      app.stage.addChild(circle);
-      app.stage.addChild(corona);
   }
 
-  addCircle(50, 100, 100);
+  addCircle(50, 100, 100, 0, 10);
 })();
