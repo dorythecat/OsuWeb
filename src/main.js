@@ -1,4 +1,4 @@
-import { Application, Graphics } from "pixi.js";
+import { Application, Graphics, Text, TextStyle } from "pixi.js";
 
 (async () => {
     // Create a new application
@@ -13,6 +13,41 @@ import { Application, Graphics } from "pixi.js";
     app.stage.eventMode = 'static';
     app.stage.hitArea = app.screen;
 
+    // Add score text
+    let score = 0;
+    const scoreText = new Text({
+        text: `Score: ${score}`,
+        style: new TextStyle({
+            fontFamily: "Arial",
+            fontSize: 24,
+            fill: 0xffffff
+        })
+    });
+    scoreText.x = 10;
+    scoreText.y = 10;
+    app.stage.addChild(scoreText);
+
+    let multiplier = 1;
+    const multiplierText = new Text({
+        text: `Multiplier: x${multiplier.toFixed(2)}`,
+        style: new TextStyle({
+            fontFamily: "Arial",
+            fontSize: 24,
+            fill: 0xffffff
+        })
+    });
+    multiplierText.x = 10;
+    multiplierText.y = 40;
+    app.stage.addChild(multiplierText);
+
+    app.ticker.add((ticker) => {
+        if (multiplier === 1) return;
+        multiplier -= 0.01 * ticker.deltaTime;
+        if (multiplier < 1) multiplier = 1;
+        multiplierText.text = `Multiplier: x${multiplier.toFixed(2)}`;
+    });
+
+    // Function to add a circle
     function addCircle(radius, x, y, appearTime, disappearTime) {
         const circle = new Graphics().circle(x, y, radius).fill("#000000");
 
@@ -32,19 +67,19 @@ import { Application, Graphics } from "pixi.js";
         corona.y = y;
 
 
-        let timing = disappearTime + appearTime;
+        let timer = disappearTime + appearTime;
         let added = false;
         function time(ticker) {
-            timing -= ticker.deltaTime / 10;
-            if (timing <= disappearTime && !added) {
+            timer -= ticker.deltaTime / 10;
+            if (timer <= disappearTime && !added) {
                 app.stage.addChild(circle);
                 app.stage.addChild(corona);
                 added = true;
             }
-            corona.scale.set(timing / 5 + 0.8, timing / 5 + 0.8);
-            circle.alpha = corona.alpha = 1 - timing / 20;
-            if (timing > 0) return;
-            timing = 0;
+            corona.scale.set(timer / 5 + 0.8, timer / 5 + 0.8);
+            circle.alpha = corona.alpha = 1 - timer / 20;
+            if (timer > 0) return;
+            timer = 0;
             app.ticker.remove(time);
             circle.destroy();
             corona.destroy();
@@ -53,13 +88,20 @@ import { Application, Graphics } from "pixi.js";
         app.ticker.add(time);
 
         circle.on('pointerdown', () => {
-            console.log(timing);
+            const addition = 10 / timer;
+
+            score += Math.floor(addition * multiplier);
+            scoreText.text = `Score: ${score}`;
+
+            multiplier += Math.min(10, addition / 10);
+            multiplierText.text = `Multiplier: ${multiplier.toFixed(2)}`;
+
             circle.scale.set(0.9, 0.9);
         });
         app.stage.on('pointerup', () => {
             if (circle && circle.scale) circle.scale.set(1, 1);
         });
-    }
+      }
 
-    addCircle(50, 100, 100, 0, 10);
+      addCircle(50, 200, 200, 0, 10);
 })();
