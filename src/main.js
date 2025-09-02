@@ -88,9 +88,9 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
         app.ticker.add(time);
 
         circle.on('pointerdown', () => {
-            const addition = Math.floor(10 / timer);
+            const addition = 10 / timer;
 
-            score += addition * multiplier;
+            score += Math.floor(addition * multiplier);
             scoreText.text = `Score: ${score}`;
 
             multiplier += Math.min(10, addition / 10);
