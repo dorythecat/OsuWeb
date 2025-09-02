@@ -64,7 +64,8 @@ import { Application, Graphics, Text } from "pixi.js";
         app.ticker.add(time);
 
         circle.on('pointerdown', () => {
-            console.log(timer);
+            score += Math.floor(10 / timer)
+            scoreText.text = `Score: ${score}`;
             circle.scale.set(0.9, 0.9);
         });
         app.stage.on('pointerup', () => {
