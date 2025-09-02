@@ -43,19 +43,19 @@ import { Application, Graphics, Text } from "pixi.js";
         corona.y = y;
 
 
-        let timing = disappearTime + appearTime;
+        let timer = disappearTime + appearTime;
         let added = false;
         function time(ticker) {
-            timing -= ticker.deltaTime / 10;
-            if (timing <= disappearTime && !added) {
+            timer -= ticker.deltaTime / 10;
+            if (timer <= disappearTime && !added) {
                 app.stage.addChild(circle);
                 app.stage.addChild(corona);
                 added = true;
             }
-            corona.scale.set(timing / 5 + 0.8, timing / 5 + 0.8);
-            circle.alpha = corona.alpha = 1 - timing / 20;
-            if (timing > 0) return;
-            timing = 0;
+            corona.scale.set(timer / 5 + 0.8, timer / 5 + 0.8);
+            circle.alpha = corona.alpha = 1 - timer / 20;
+            if (timer > 0) return;
+            timer = 0;
             app.ticker.remove(time);
             circle.destroy();
             corona.destroy();
@@ -64,7 +64,7 @@ import { Application, Graphics, Text } from "pixi.js";
         app.ticker.add(time);
 
         circle.on('pointerdown', () => {
-            console.log(timing);
+            console.log(timer);
             circle.scale.set(0.9, 0.9);
         });
         app.stage.on('pointerup', () => {
