@@ -59,6 +59,7 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
         const corona = new Graphics()
             .circle(x, y, radius + 15).fill("#000000")
             .circle(x, y, radius + 10).cut();
+
         corona.pivot.set(x, y);
         corona.x = x;
         corona.y = y;
@@ -97,7 +98,7 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
         app.stage.on('pointerup', () => {
             if (circle && circle.scale) circle.scale.set(1);
         });
-      }
+    }
 
-      addCircle(50, 200, 200, 0, 10);
+    addCircle(50, 200, 200, 0, 10);
 })();
