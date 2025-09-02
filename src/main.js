@@ -42,6 +42,7 @@ import { Application, Graphics } from "pixi.js";
                 added = true;
             }
             corona.scale.set(timing / 5 + 0.8, timing / 5 + 0.8);
+            circle.alpha = corona.alpha = 1 - timing / 20;
             if (timing > 0) return;
             timing = 0;
             app.ticker.remove(time);
