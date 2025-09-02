@@ -20,21 +20,21 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
     });
 
     // Add score text
-    let score = 0;
+    let score = 0, multiplier = 1;
     const scoreText = new Text({
         text: `Score: ${score}`,
-        style: textStyle
+        style: textStyle,
     });
-    scoreText.x = scoreText.y = 10;
-    app.stage.addChild(scoreText);
 
-    let multiplier = 1;
     const multiplierText = new Text({
         text: `Multiplier: x${multiplier.toFixed(2)}`,
         style: textStyle
     });
-    multiplierText.x = 10;
+
+    scoreText.x = scoreText.y = multiplierText.x = 10;
     multiplierText.y = 40;
+
+    app.stage.addChild(scoreText);
     app.stage.addChild(multiplierText);
 
     app.ticker.add((ticker) => {
@@ -45,24 +45,20 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
     });
 
     // Function to add a circle
-    function addCircle(radius, x, y, appearTime, disappearTime) {
-        const circle = new Graphics().circle(x, y, radius).fill("#000000");
+    function addCircle(radius, x, y, appearTime, disappearTime, color) {
+        const circle = new Graphics().circle(x, y, radius).fill(color);
+        const corona = new Graphics()
+            .circle(x, y, radius + 15).fill(color)
+            .circle(x, y, radius + 10).cut();
 
         circle.eventMode = "static";
         circle.cursor = "pointer";
 
-        // Set the pivot so it's in the center of the circle, and translate the circle back to its position
+        // Set the pivot so it's in the center, and translate to position
         circle.pivot.set(x, y);
-        circle.x = x;
-        circle.y = y;
-
-        const corona = new Graphics()
-            .circle(x, y, radius + 15).fill("#000000")
-            .circle(x, y, radius + 10).cut();
-
         corona.pivot.set(x, y);
-        corona.x = x;
-        corona.y = y;
+        circle.x = corona.x = x;
+        circle.y = corona.y = y;
 
         let timer = disappearTime + appearTime;
         let added = false;
@@ -100,5 +96,5 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
         });
     }
 
-    addCircle(50, 200, 200, 0, 10);
+    addCircle(50, 200, 200, 0, 10, "black");
 })();
