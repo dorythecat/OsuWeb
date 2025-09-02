@@ -24,13 +24,6 @@ import { Application, Graphics } from "pixi.js";
       circle.x = x;
       circle.y = y;
 
-      circle.on('pointerdown', () => {
-          circle.scale.set(0.5, 0.5);
-      });
-      app.stage.on('pointerup', () => {
-          circle.scale.set(1, 1);
-      });
-
       const corona = new Graphics()
           .circle(x, y, radius + 15).fill("#000000")
           .circle(x, y, radius + 10).cut();
@@ -58,6 +51,14 @@ import { Application, Graphics } from "pixi.js";
       }
 
       app.ticker.add(time);
+
+      circle.on('pointerdown', () => {
+          console.log(timing);
+          circle.scale.set(0.9, 0.9);
+      });
+      app.stage.on('pointerup', () => {
+          if (circle && circle.scale) circle.scale.set(1, 1);
+      });
   }
 
   addCircle(50, 100, 100, 0, 10);
