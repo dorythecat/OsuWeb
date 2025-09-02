@@ -73,7 +73,7 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
                 app.stage.addChild(corona);
                 added = true;
             }
-            corona.scale.set(timer / 5 + 0.8, timer / 5 + 0.8);
+            corona.scale.set(timer / 5 + 0.8);
             circle.alpha = corona.alpha = 1 - timer / 20;
             if (timer > 0) return;
             timer = 0;
@@ -93,10 +93,10 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
             multiplier += Math.min(10, addition / 10);
             multiplierText.text = `Multiplier: ${multiplier.toFixed(2)}`;
 
-            circle.scale.set(0.9, 0.9);
+            circle.scale.set(0.9);
         });
         app.stage.on('pointerup', () => {
-            if (circle && circle.scale) circle.scale.set(1, 1);
+            if (circle && circle.scale) circle.scale.set(1);
         });
       }
 
