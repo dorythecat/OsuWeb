@@ -24,6 +24,17 @@ import { Application, Graphics, Text } from "pixi.js";
     scoreText.y = 10;
     app.stage.addChild(scoreText);
 
+    let multiplier = 1;
+    const multiplierText = new Text(`Multiplier: x${multiplier}`, {
+        fontFamily: "Arial",
+        fontSize: 24,
+        fill: 0xffffff,
+    });
+    multiplierText.x = 10;
+    multiplierText.y = 40;
+    app.stage.addChild(multiplierText);
+
+    // Function to add a circle
     function addCircle(radius, x, y, appearTime, disappearTime) {
         const circle = new Graphics().circle(x, y, radius).fill("#000000");
 
