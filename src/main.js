@@ -63,7 +63,6 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
         corona.x = x;
         corona.y = y;
 
-
         let timer = disappearTime + appearTime;
         let added = false;
         function time(ticker) {
