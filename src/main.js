@@ -59,7 +59,7 @@ import { Application, Graphics } from "pixi.js";
         app.stage.on('pointerup', () => {
             if (circle && circle.scale) circle.scale.set(1, 1);
         });
-      }
+    }
 
-      addCircle(50, 100, 100, 0, 10);
+    addCircle(50, 100, 100, 0, 10);
 })();
