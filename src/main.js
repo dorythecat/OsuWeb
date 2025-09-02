@@ -42,12 +42,11 @@ import { Application, Graphics } from "pixi.js";
               added = true;
           }
           corona.scale.set(timing / 5 + 0.8, timing / 5 + 0.8);
-          if (timing <= 0) {
-              timing = 0;
-              app.ticker.remove(time);
-              circle.destroy();
-              corona.destroy();
-          }
+          if (timing > 0) return;
+          timing = 0;
+          app.ticker.remove(time);
+          circle.destroy();
+          corona.destroy();
       }
 
       app.ticker.add(time);
