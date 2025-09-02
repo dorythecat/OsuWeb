@@ -13,28 +13,25 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
     app.stage.eventMode = 'static';
     app.stage.hitArea = app.screen;
 
+    const textStyle = new TextStyle({
+        fontFamily: "Arial",
+        fontSize: 24,
+        fill: 0xffffff
+    });
+
     // Add score text
     let score = 0;
     const scoreText = new Text({
         text: `Score: ${score}`,
-        style: new TextStyle({
-            fontFamily: "Arial",
-            fontSize: 24,
-            fill: 0xffffff
-        })
+        style: textStyle
     });
-    scoreText.x = 10;
-    scoreText.y = 10;
+    scoreText.x = scoreText.y = 10;
     app.stage.addChild(scoreText);
 
     let multiplier = 1;
     const multiplierText = new Text({
         text: `Multiplier: x${multiplier.toFixed(2)}`,
-        style: new TextStyle({
-            fontFamily: "Arial",
-            fontSize: 24,
-            fill: 0xffffff
-        })
+        style: textStyle
     });
     multiplierText.x = 10;
     multiplierText.y = 40;
