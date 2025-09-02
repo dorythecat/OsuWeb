@@ -96,5 +96,15 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
         });
     }
 
-    addCircle(50, 200, 200, 0, 10, "black");
+    const line = new Graphics()
+        .moveTo(200, 200)
+        .bezierCurveTo(200, 200, 500, 400, 500, 200)
+        .stroke({ width: 100, color: 0x333333 })
+        .circle(200, 200, 50).fill("0x333333")
+        .circle(500, 200, 50).fill("0x333333");
+    app.stage.addChild(line);
+
+    // Add initial circle
+
+    //addCircle(50, 200, 200, 0, 10, "black");
 })();
