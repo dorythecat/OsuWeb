@@ -1,4 +1,4 @@
-import { Application, Graphics } from "pixi.js";
+import { Application, Graphics, Text } from "pixi.js";
 
 (async () => {
     // Create a new application
@@ -12,6 +12,17 @@ import { Application, Graphics } from "pixi.js";
 
     app.stage.eventMode = 'static';
     app.stage.hitArea = app.screen;
+
+    // Add score text
+    let score = 0;
+    const scoreText = new Text(`Score: ${score}`, {
+        fontFamily: "Arial",
+        fontSize: 24,
+        fill: 0xffffff,
+    });
+    scoreText.x = 10;
+    scoreText.y = 10;
+    app.stage.addChild(scoreText);
 
     function addCircle(radius, x, y, appearTime, disappearTime) {
         const circle = new Graphics().circle(x, y, radius).fill("#000000");
@@ -61,5 +72,5 @@ import { Application, Graphics } from "pixi.js";
         });
       }
 
-      addCircle(50, 100, 100, 0, 10);
+      addCircle(50, 200, 200, 0, 10);
 })();
