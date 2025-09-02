@@ -77,7 +77,7 @@ import { Application, Graphics, Text } from "pixi.js";
         circle.on('pointerdown', () => {
             const addition = Math.floor(10 / timer);
 
-            score += addition;
+            score += addition * multiplier;
             scoreText.text = `Score: ${score}`;
 
             multiplier += Math.min(10, addition / 10);
