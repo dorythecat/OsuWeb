@@ -1,4 +1,4 @@
-import { Application, Graphics, Text } from "pixi.js";
+import { Application, Graphics, Text, TextStyle } from "pixi.js";
 
 (async () => {
     // Create a new application
@@ -15,20 +15,26 @@ import { Application, Graphics, Text } from "pixi.js";
 
     // Add score text
     let score = 0;
-    const scoreText = new Text(`Score: ${score}`, {
-        fontFamily: "Arial",
-        fontSize: 24,
-        fill: 0xffffff,
+    const scoreText = new Text({
+        text: `Score: ${score}`,
+        style: new TextStyle({
+            fontFamily: "Arial",
+            fontSize: 24,
+            fill: 0xffffff
+        })
     });
     scoreText.x = 10;
     scoreText.y = 10;
     app.stage.addChild(scoreText);
 
     let multiplier = 1;
-    const multiplierText = new Text(`Multiplier: x${multiplier}`, {
-        fontFamily: "Arial",
-        fontSize: 24,
-        fill: 0xffffff,
+    const multiplierText = new Text({
+        text: `Multiplier: x${multiplier}`,
+        style: new TextStyle({
+            fontFamily: "Arial",
+            fontSize: 24,
+            fill: 0xffffff
+        })
     });
     multiplierText.x = 10;
     multiplierText.y = 40;
