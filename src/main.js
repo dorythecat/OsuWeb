@@ -75,8 +75,14 @@ import { Application, Graphics, Text } from "pixi.js";
         app.ticker.add(time);
 
         circle.on('pointerdown', () => {
-            score += Math.floor(10 / timer)
+            const addition = Math.floor(10 / timer);
+
+            score += addition;
             scoreText.text = `Score: ${score}`;
+
+            multiplier += Math.min(10, addition / 10);
+            multiplierText.text = `Multiplier: ${multiplier}`;
+
             circle.scale.set(0.9, 0.9);
         });
         app.stage.on('pointerup', () => {
