@@ -29,7 +29,7 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
 
     let multiplier = 1;
     const multiplierText = new Text({
-        text: `Multiplier: x${multiplier}`,
+        text: `Multiplier: x${multiplier.toFixed(2)}`,
         style: new TextStyle({
             fontFamily: "Arial",
             fontSize: 24,
@@ -39,6 +39,13 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
     multiplierText.x = 10;
     multiplierText.y = 40;
     app.stage.addChild(multiplierText);
+
+    app.ticker.add((ticker) => {
+        if (multiplier === 1) return;
+        multiplier -= 0.01 * ticker.deltaTime;
+        if (multiplier < 1) multiplier = 1;
+        multiplierText.text = `Multiplier: x${multiplier.toFixed(2)}`;
+    });
 
     // Function to add a circle
     function addCircle(radius, x, y, appearTime, disappearTime) {
@@ -87,7 +94,7 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
             scoreText.text = `Score: ${score}`;
 
             multiplier += Math.min(10, addition / 10);
-            multiplierText.text = `Multiplier: ${multiplier}`;
+            multiplierText.text = `Multiplier: ${multiplier.toFixed(2)}`;
 
             circle.scale.set(0.9, 0.9);
         });
