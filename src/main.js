@@ -106,9 +106,7 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
             .bezierCurveTo(x1, y1, x2, y2, x3, y3).stroke({ width: containerRadius * 2, color: containerColor })
             .circle(x0, y0, containerRadius).fill(containerColor)
             .circle(x3, y3, containerRadius).fill();
-        app.stage.addChild(container);
 
-        // The slider should be able to be dragged along the path
         const slider = new Graphics()
             .circle(0, 0, sliderRadius).fill(sliderColor);
         slider.pivot.set(0, 0);
@@ -116,7 +114,6 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         slider.y = y0;
         slider.eventMode = "static";
         slider.cursor = "pointer";
-        app.stage.addChild(slider);
 
         let dragging = false;
         let t = 0; // Parameter from 0 to 1 along the Bézier curve
@@ -130,6 +127,24 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         // Detect if we're dragging the slider
         slider.on('pointerdown', () => { dragging = true; });
         app.stage.on('pointerup', () => { dragging = false; });
+
+        let timer = disappearTime + appearTime;
+        let added = false;
+        function time(ticker) {
+            timer -= ticker.deltaTime / 10;
+            if (timer <= disappearTime && !added) {
+                app.stage.addChild(container);
+                app.stage.addChild(slider);
+                added = true;
+            }
+            if (timer > 0) return;
+            timer = 0;
+            app.ticker.remove(time);
+            container.destroy();
+            slider.destroy();
+        }
+
+        app.ticker.add(time);
 
         // On pointer move, if dragging, move the slider to the closest point on the Bézier curve
         app.stage.on('pointermove', (event) => {
