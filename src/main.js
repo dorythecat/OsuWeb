@@ -116,10 +116,10 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
     app.stage.addChild(slider);
 
     let dragging = false;
-    let t = 0; // Parameter from 0 to 1 along the bezier curve
+    let t = 0; // Parameter from 0 to 1 along the Bézier curve
 
     function cubicBezier(t, p0, p1, p2, p3) {
-        return (1 - t) ** 3 * p0 + 3 * ((1 - t) ** 2 * t * p1 + (1 - t) * t ** 2 * p2) + t ** 3 * p3;
+        return p0 * (1 - t) ** 3 + 3 * (p1 * t * (1 - t) ** 2 + p2 * (1 - t) * t ** 2) + p3 * t ** 3;
     }
 
     slider.on('pointerdown', () => {
@@ -130,19 +130,16 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
     });
     app.stage.on('pointermove', (event) => {
         if (!dragging) return;
-        const pos = event.global;
-        // Find the closest point on the bezier curve to pos
+        // Find the closest point on the Bézier curve to the current position
         let closestT = t;
         let closestDist = Infinity;
         for (let i = 0; i <= 100; i++) {
             const tt = i / 100;
-            const bx = cubicBezier(tt, 200, 200, 500, 500);
-            const by = cubicBezier(tt, 200, 200, 400, 200);
-            const dist = (bx - pos.x) ** 2 + (by - pos.y) ** 2;
-            if (dist < closestDist) {
-                closestDist = dist;
-                closestT = tt;
-            }
+            const dist = (cubicBezier(tt, 200, 200, 500, 500) - event.global.x) ** 2 +
+                (cubicBezier(tt, 200, 200, 400, 200) - event.global.y) ** 2;
+            if (dist >= closestDist) continue;
+            closestDist = dist;
+            closestT = tt;
         }
         t = closestT;
         slider.x = cubicBezier(t, 200, 200, 500, 500);
