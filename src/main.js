@@ -66,7 +66,7 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         let added = false;
         function time(ticker) {
             timer -= ticker.deltaTime / 10;
-            if (timer <= disappearTime && !added) {
+            if (!added && timer <= disappearTime) {
                 app.stage.addChild(circle);
                 app.stage.addChild(corona);
                 added = true;
@@ -132,7 +132,7 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         let added = false;
         function time(ticker) {
             timer -= ticker.deltaTime / 10;
-            if (timer <= disappearTime && !added) {
+            if (!added && timer <= disappearTime) {
                 app.stage.addChild(container);
                 app.stage.addChild(slider);
                 added = true;
