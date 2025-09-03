@@ -141,6 +141,9 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
             closestDist = dist;
             closestT = tt;
         }
+
+        if (Math.sqrt(closestDist) > 50) return; // Only move if within the curve's width
+
         t = closestT;
         slider.x = cubicBezier(t, 200, 200, 500, 500);
         slider.y = cubicBezier(t, 200, 200, 400, 200);
