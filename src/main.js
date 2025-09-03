@@ -1,5 +1,7 @@
 import { Application, Graphics, Text, TextStyle } from "pixi.js";
 
+const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
+
 (async () => {
     // Create a new application
     const app = new Application();
@@ -96,60 +98,69 @@ import { Application, Graphics, Text, TextStyle } from "pixi.js";
         });
     }
 
-    const line = new Graphics()
-        .moveTo(200, 200)
-        .bezierCurveTo(200, 200, 500, 400, 500, 200)
-        .stroke({ width: 100, color: 0x333333 })
-        .circle(200, 200, 50).fill("0x333333")
-        .circle(500, 200, 50).fill("0x333333");
-    app.stage.addChild(line);
+    function addSlider(containerRadius, sliderRadius, x0, y0, x1, y1, x2, y2, x3, y3, appearTime, disappearTime, containerColor, sliderColor) {
+        const container = new Graphics()
+            .moveTo(x0, y0)
+            .bezierCurveTo(x1, y1, x2, y2, x3, y3)
+            .stroke({ width: containerRadius * 2, color: containerColor })
+            .circle(x0, y0, containerRadius).fill(containerColor)
+            .circle(x3, y3, containerRadius).fill();
+        app.stage.addChild(container);
 
-    // The slider should be able to be dragged along the path
-    const slider = new Graphics()
-        .circle(0, 0, 30)
-        .fill("0xffff00");
-    slider.pivot.set(0, 0);
-    slider.x = 200;
-    slider.y = 200;
-    slider.eventMode = "static";
-    slider.cursor = "pointer";
-    app.stage.addChild(slider);
+        // The slider should be able to be dragged along the path
+        const slider = new Graphics()
+            .circle(0, 0, sliderRadius)
+            .fill(sliderColor);
+        slider.pivot.set(0, 0);
+        slider.x = x0;
+        slider.y = y0;
+        slider.eventMode = "static";
+        slider.cursor = "pointer";
+        app.stage.addChild(slider);
 
-    let dragging = false;
-    let t = 0; // Parameter from 0 to 1 along the Bézier curve
+        let dragging = false;
+        let t = 0; // Parameter from 0 to 1 along the Bézier curve
 
-    function cubicBezier(t, p0, p1, p2, p3) {
-        return p0 * (1 - t) ** 3 + 3 * (p1 * t * (1 - t) ** 2 + p2 * (1 - t) * t ** 2) + p3 * t ** 3;
-    }
-
-    slider.on('pointerdown', () => {
-        dragging = true;
-    });
-    app.stage.on('pointerup', () => {
-        dragging = false;
-    });
-    app.stage.on('pointermove', (event) => {
-        if (!dragging) return;
-        // Find the closest point on the Bézier curve to the current position
-        let closestT = t;
-        let closestDist = Infinity;
-        for (let i = 0; i <= 100; i++) {
-            const tt = i / 100;
-            const dist = (cubicBezier(tt, 200, 200, 500, 500) - event.global.x) ** 2 +
-                (cubicBezier(tt, 200, 200, 400, 200) - event.global.y) ** 2;
-            if (dist >= closestDist) continue;
-            closestDist = dist;
-            closestT = tt;
+        function cubicBezier(t, p0, p1, p2, p3) { // Get bezier point at t
+            return p0 * (1 - t) ** 3 + 3 * (p1 * t * (1 - t) ** 2 + p2 * (1 - t) * t ** 2) + p3 * t ** 3;
         }
 
-        if (Math.sqrt(closestDist) > 50) return; // Only move if within the curve's width
+        // Detect if we're dragging the slider
+        slider.on('pointerdown', () => { dragging = true; });
+        app.stage.on('pointerup', () => { dragging = false; });
 
-        t = closestT;
-        slider.x = cubicBezier(t, 200, 200, 500, 500);
-        slider.y = cubicBezier(t, 200, 200, 400, 200);
-    });
+        // On pointer move, if dragging, move the slider to the closest point on the Bézier curve
+        app.stage.on('pointermove', (event) => {
+            if (!dragging) return;
+
+            // Find the closest point on the Bézier curve to the pointer position
+            let closestT = t;
+            let closestDist = Infinity;
+            for (let i = 0; i <= BEZIER_STEPS; i++) {
+                const tt = i / BEZIER_STEPS;
+                const dist = (cubicBezier(tt, x0, x1, x2, x3) - event.global.x) ** 2 +
+                    (cubicBezier(tt, y0, y1, y2, y3) - event.global.y) ** 2;
+                if (dist >= closestDist) continue;
+                closestDist = dist;
+                closestT = tt;
+            }
+
+            // Only move if within the container and not on the same pos as before
+            if (closestT === t || Math.sqrt(closestDist) > 50) return;
+
+            // Move the slider accordingly
+            t = closestT;
+            slider.x = cubicBezier(t, x0, x1, x2, x3);
+            slider.y = cubicBezier(t, y0, y1, y2, y3);
+        });
+    }
+
+    addSlider(50, 30,
+        200, 200, 200, 200,
+        500, 400, 500, 200,
+        0, 10,
+        "0x333333", "0xffff00");
 
     // Add initial circle
-
     //addCircle(50, 200, 200, 0, 10, "black");
 })();
