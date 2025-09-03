@@ -141,11 +141,11 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
             }
             if (corona && corona.scale) {
                 corona.scale.set(2 * (timer - clickTime) / disappearTime + 0.8);
-                corona.alpha = 1 - timer / disappearTime;
+                corona.alpha = 1 - (timer - clickTime) / disappearTime;
             }
             if (corona && timer <= clickTime) corona.destroy();
             if (!corona.scale) { // Corona does not exist
-                const t = 1 - timer / (disappearTime - clickTime);
+                const t = 1 - timer / disappearTime;
                 slider.x = cubicBezier(t, x0, x1, x2, x3);
                 slider.y = cubicBezier(t, y0, y1, y2, y3);
             }
@@ -194,7 +194,7 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
     addSlider(50, 30,
         200, 200, 200, 200,
         500, 400, 500, 200,
-        0, 10, 20,
+        0, 10, 10,
         "0x333333", "0x000000");
 
     // Add initial circle
