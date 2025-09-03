@@ -160,7 +160,7 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
 
         // On pointer move, if dragging, move the slider to the closest point on the Bézier curve
         app.stage.on('pointermove', (event) => {
-            if (!dragging) return;
+            if (!dragging || timer > 0) return;
 
             // Find the closest point on the Bézier curve to the pointer position
             let closestT = 0;
