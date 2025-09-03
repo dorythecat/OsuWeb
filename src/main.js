@@ -121,9 +121,6 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         slider.eventMode = "static";
         slider.cursor = "pointer";
 
-        let dragging = false;
-        let t = 0; // Parameter from 0 to 1 along the Bézier curve
-
         function cubicBezier(t, p0, p1, p2, p3) { // Get bezier point at t
             const t2 = t * t;
             const t3 = t2 * t;
@@ -131,6 +128,7 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         }
 
         // Detect if we're dragging the slider
+        let dragging = false;
         slider.on('pointerdown', () => { dragging = true; });
         app.stage.on('pointerup', () => { dragging = false; });
 
@@ -144,13 +142,17 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
                 app.stage.addChild(corona);
                 added = true;
             }
-            if (corona && corona.scale) corona.scale.set((timer - clickTime) / 5 + 0.8);
+            if (corona && corona.scale) {
+                corona.scale.set((timer - clickTime) / 5 + 0.8);
+                corona.alpha = timer / 20;
+            }
             if (corona && timer <= clickTime) corona.destroy();
-            if (!corona.scale) {
-                const t = 1 - timer / (disappearTime - appearTime - clickTime);
+            if (!corona.scale) { // Corona does not exist
+                const t = 1 - timer / (disappearTime - clickTime);
                 slider.x = cubicBezier(t, x0, x1, x2, x3);
                 slider.y = cubicBezier(t, y0, y1, y2, y3);
             }
+            console.log(timer);
             if (timer > 0) return;
             timer = 0;
             app.ticker.remove(time);
@@ -160,13 +162,12 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
 
         app.ticker.add(time);
 
-        /*
         // On pointer move, if dragging, move the slider to the closest point on the Bézier curve
         app.stage.on('pointermove', (event) => {
             if (!dragging) return;
 
             // Find the closest point on the Bézier curve to the pointer position
-            let closestT = t;
+            let closestT = 0;
             let closestDist = Infinity;
             for (let i = 0; i <= BEZIER_STEPS; i++) {
                 const tt = i / BEZIER_STEPS;
@@ -177,15 +178,21 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
                 closestT = tt;
             }
 
-            // Only move if within the container and not on the same pos as before
-            if (closestT === t || closestDist > containerRadius * containerRadius) return;
-
-            // Move the slider accordingly
-            t = closestT;
-            slider.x = cubicBezier(t, x0, x1, x2, x3);
-            slider.y = cubicBezier(t, y0, y1, y2, y3);
+            // If it's withing the container distance, register points
+            if (closestDist <= containerRadius * containerRadius) {
+                score += 1;
+                scoreText.text = `Score: ${score}`;
+                multiplier += 0.1;
+                multiplierText.text = `Multiplier: x${multiplier.toFixed(2)}`;
+            } else {
+                score -= 5;
+                if (score < 0) score = 0;
+                scoreText.text = `Score: ${score}`;
+                multiplier -= 0.5;
+                if (multiplier < 1) multiplier = 1;
+                multiplierText.text = `Multiplier: x${multiplier.toFixed(2)}`;
+            }
         });
-        */
     }
 
     addSlider(50, 30,
