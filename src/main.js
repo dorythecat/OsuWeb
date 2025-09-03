@@ -99,8 +99,10 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
     }
 
     function addSlider(containerRadius, sliderRadius,
-                       x0, y0, x1, y1, x2, y2, x3, y3,
-                       appearTime, disappearTime, containerColor, sliderColor) {
+                       x0, y0, x1, y1,
+                       x2, y2, x3, y3,
+                       appearTime, clickTime, disappearTime,
+                       containerColor, sliderColor) {
         const container = new Graphics()
             .moveTo(x0, y0)
             .bezierCurveTo(x1, y1, x2, y2, x3, y3).stroke({ width: containerRadius * 2, color: containerColor })
@@ -109,9 +111,13 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
 
         const slider = new Graphics()
             .circle(0, 0, sliderRadius).fill(sliderColor);
+        const corona = new Graphics()
+            .circle(0, 0, sliderRadius + 15).fill(sliderColor)
+            .circle(0, 0, sliderRadius + 10).cut();
         slider.pivot.set(0, 0);
-        slider.x = x0;
-        slider.y = y0;
+        corona.pivot.set(0, 0);
+        slider.x = corona.x = x0;
+        slider.y = corona.y = y0;
         slider.eventMode = "static";
         slider.cursor = "pointer";
 
@@ -128,15 +134,18 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         slider.on('pointerdown', () => { dragging = true; });
         app.stage.on('pointerup', () => { dragging = false; });
 
-        let timer = disappearTime + appearTime;
+        let timer = disappearTime + clickTime + appearTime;
         let added = false;
         function time(ticker) {
             timer -= ticker.deltaTime / 10;
-            if (!added && timer <= disappearTime) {
+            if (!added && timer <= disappearTime + clickTime) {
                 app.stage.addChild(container);
                 app.stage.addChild(slider);
+                app.stage.addChild(corona);
                 added = true;
             }
+            if (corona && corona.scale) corona.scale.set((timer - clickTime) / 5 + 0.8);
+            if (corona && timer <= clickTime) corona.destroy();
             if (timer > 0) return;
             timer = 0;
             app.ticker.remove(time);
@@ -175,7 +184,7 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
     addSlider(50, 30,
         200, 200, 200, 200,
         500, 400, 500, 200,
-        0, 10,
+        0, 10, 20,
         "0x333333", "0xffff00");
 
     // Add initial circle
