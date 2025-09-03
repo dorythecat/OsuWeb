@@ -199,7 +199,7 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         200, 200, 200, 200,
         500, 400, 500, 200,
         0, 10, 20,
-        "0x333333", "0xffff00");
+        "0x333333", "0x000000");
 
     // Add initial circle
     //addCircle(50, 200, 200, 0, 10, "black");
