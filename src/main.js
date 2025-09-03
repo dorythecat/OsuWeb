@@ -81,7 +81,11 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
 
         app.ticker.add(time);
 
+        let clicked = false;
         circle.on('pointerdown', () => {
+            if (clicked) return;
+            clicked = true;
+
             const addition = 10 / timer;
 
             score += Math.floor(addition * multiplier);
@@ -127,9 +131,26 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         }
 
         // Detect if we're dragging the slider
-        let dragging = false;
-        slider.on('pointerdown', () => { dragging = true; });
-        app.stage.on('pointerup', () => { dragging = false; });
+        let dragging = false, alreadyDragged = false;
+        slider.on('pointerdown', () => {
+            if (alreadyDragged) return;
+            dragging = true;
+
+            const addition = 10 / (timer - clickTime);
+
+            score += Math.floor(addition * multiplier);
+            scoreText.text = `Score: ${score}`;
+
+            multiplier += Math.min(10, addition / 10);
+            multiplierText.text = `Multiplier: ${multiplier.toFixed(2)}`;
+
+            slider.scale.set(0.9);
+        });
+        app.stage.on('pointerup', () => {
+            dragging = false;
+            alreadyDragged = true;
+            if (slider && slider.scale) slider.scale.set(1);
+        });
 
         let timer = disappearTime + clickTime + appearTime;
         let added = false;
@@ -160,7 +181,7 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
 
         // On pointer move, if dragging, move the slider to the closest point on the Bézier curve
         app.stage.on('pointermove', (event) => {
-            if (!dragging || timer > 0) return;
+            if (!dragging || alreadyDragged || timer > 0) return;
 
             // Find the closest point on the Bézier curve to the pointer position
             let closestT = 0;
