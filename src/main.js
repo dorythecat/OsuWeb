@@ -103,16 +103,14 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
                        appearTime, disappearTime, containerColor, sliderColor) {
         const container = new Graphics()
             .moveTo(x0, y0)
-            .bezierCurveTo(x1, y1, x2, y2, x3, y3)
-            .stroke({ width: containerRadius * 2, color: containerColor })
+            .bezierCurveTo(x1, y1, x2, y2, x3, y3).stroke({ width: containerRadius * 2, color: containerColor })
             .circle(x0, y0, containerRadius).fill(containerColor)
             .circle(x3, y3, containerRadius).fill();
         app.stage.addChild(container);
 
         // The slider should be able to be dragged along the path
         const slider = new Graphics()
-            .circle(0, 0, sliderRadius)
-            .fill(sliderColor);
+            .circle(0, 0, sliderRadius).fill(sliderColor);
         slider.pivot.set(0, 0);
         slider.x = x0;
         slider.y = y0;
