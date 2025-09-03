@@ -48,17 +48,17 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
 
     // Function to add a circle
     function addCircle(radius, x, y, appearTime, disappearTime, color) {
-        const circle = new Graphics().circle(x, y, radius).fill(color);
+        const circle = new Graphics().circle(0, 0, radius).fill(color);
         const corona = new Graphics()
-            .circle(x, y, radius + 15).fill(color)
-            .circle(x, y, radius + 10).cut();
+            .circle(0, 0, radius + 15).fill(color)
+            .circle(0, 0, radius + 10).cut();
 
         circle.eventMode = "static";
         circle.cursor = "pointer";
 
         // Set the pivot so it's in the center, and translate to position
-        circle.pivot.set(x, y);
-        corona.pivot.set(x, y);
+        circle.pivot.set(0, 0);
+        corona.pivot.set(0, 0);
         circle.x = corona.x = x;
         circle.y = corona.y = y;
 
@@ -67,12 +67,11 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         function time(ticker) {
             timer -= ticker.deltaTime / 10;
             if (!added && timer <= disappearTime) {
-                app.stage.addChild(circle);
-                app.stage.addChild(corona);
+                app.stage.addChild(circle, corona);
                 added = true;
             }
-            corona.scale.set(timer / 5 + 0.8);
-            circle.alpha = corona.alpha = 1 - timer / 20;
+            corona.scale.set(2 * timer / disappearTime + 0.8);
+            circle.alpha = corona.alpha = 1 - timer / disappearTime;
             if (timer > 0) return;
             timer = 0;
             app.ticker.remove(time);
@@ -137,14 +136,12 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         function time(ticker) {
             timer -= ticker.deltaTime / 10;
             if (!added && timer <= disappearTime + clickTime) {
-                app.stage.addChild(container);
-                app.stage.addChild(slider);
-                app.stage.addChild(corona);
+                app.stage.addChild(container, slider, corona);
                 added = true;
             }
             if (corona && corona.scale) {
-                corona.scale.set((timer - clickTime) / 5 + 0.8);
-                corona.alpha = timer / 20;
+                corona.scale.set(2 * (timer - clickTime) / disappearTime + 0.8);
+                corona.alpha = 1 - timer / disappearTime;
             }
             if (corona && timer <= clickTime) corona.destroy();
             if (!corona.scale) { // Corona does not exist
