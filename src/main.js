@@ -124,7 +124,7 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         function cubicBezier(t, p0, p1, p2, p3) { // Get bezier point at t
             const t2 = t * t;
             const t3 = t2 * t;
-            return p0 - p0 * (t3 + 3 * (t2 - t)) + 3 * (p1 * (t + t3 - 2 * t2) + p2 * (t2 - t3)) + p3 * t3;
+            return p0 - p0 * (t3 - 3 * (t2 - t)) + 3 * (p1 * (t + t3 - 2 * t2) + p2 * (t2 - t3)) + p3 * t3;
         }
 
         // Detect if we're dragging the slider
