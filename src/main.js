@@ -152,7 +152,6 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
                 slider.x = cubicBezier(t, x0, x1, x2, x3);
                 slider.y = cubicBezier(t, y0, y1, y2, y3);
             }
-            console.log(timer);
             if (timer > 0) return;
             timer = 0;
             app.ticker.remove(time);
