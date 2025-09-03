@@ -62,8 +62,7 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         circle.x = corona.x = x;
         circle.y = corona.y = y;
 
-        let timer = disappearTime + appearTime;
-        let added = false;
+        let timer = disappearTime + appearTime, added = false;
         function time(ticker) {
             timer -= ticker.deltaTime / 10;
             if (!added && timer <= disappearTime) {
@@ -96,9 +95,7 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
 
             circle.scale.set(0.9);
         });
-        app.stage.on('pointerup', () => {
-            if (circle && circle.scale) circle.scale.set(1);
-        });
+        app.stage.on('pointerup', () => { if (circle && circle.scale) circle.scale.set(1); });
     }
 
     function addSlider(containerRadius, sliderRadius,
@@ -152,8 +149,7 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
             if (slider && slider.scale) slider.scale.set(1);
         });
 
-        let timer = disappearTime + clickTime + appearTime;
-        let added = false;
+        let timer = disappearTime + clickTime + appearTime, added = false;
         function time(ticker) {
             timer -= ticker.deltaTime / 10;
             let actualTimer = timer - clickTime;
