@@ -146,6 +146,11 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
             }
             if (corona && corona.scale) corona.scale.set((timer - clickTime) / 5 + 0.8);
             if (corona && timer <= clickTime) corona.destroy();
+            if (!corona.scale) {
+                const t = 1 - timer / (disappearTime - appearTime - clickTime);
+                slider.x = cubicBezier(t, x0, x1, x2, x3);
+                slider.y = cubicBezier(t, y0, y1, y2, y3);
+            }
             if (timer > 0) return;
             timer = 0;
             app.ticker.remove(time);
@@ -155,6 +160,7 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
 
         app.ticker.add(time);
 
+        /*
         // On pointer move, if dragging, move the slider to the closest point on the Bézier curve
         app.stage.on('pointermove', (event) => {
             if (!dragging) return;
@@ -179,6 +185,7 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
             slider.x = cubicBezier(t, x0, x1, x2, x3);
             slider.y = cubicBezier(t, y0, y1, y2, y3);
         });
+        */
     }
 
     addSlider(50, 30,
