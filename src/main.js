@@ -156,15 +156,16 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         let added = false;
         function time(ticker) {
             timer -= ticker.deltaTime / 10;
-            if (!added && timer <= disappearTime + clickTime) {
+            let actualTimer = timer - clickTime;
+            if (!added && actualTimer <= disappearTime) {
                 app.stage.addChild(container, slider, corona);
                 added = true;
             }
             if (corona && corona.scale) {
-                corona.scale.set(2 * (timer - clickTime) / disappearTime + 0.8);
-                corona.alpha = 1 - (timer - clickTime) / disappearTime;
+                corona.scale.set(2 * actualTimer / disappearTime + 0.8);
+                corona.alpha = 1 - actualTimer / disappearTime;
             }
-            if (corona && timer <= clickTime) corona.destroy();
+            if (corona && actualTimer <= 0) corona.destroy();
             if (!corona.scale) { // Corona does not exist
                 const t = 1 - timer / disappearTime;
                 slider.x = cubicBezier(t, x0, x1, x2, x3);
