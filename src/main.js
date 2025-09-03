@@ -98,7 +98,9 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         });
     }
 
-    function addSlider(containerRadius, sliderRadius, x0, y0, x1, y1, x2, y2, x3, y3, appearTime, disappearTime, containerColor, sliderColor) {
+    function addSlider(containerRadius, sliderRadius,
+                       x0, y0, x1, y1, x2, y2, x3, y3,
+                       appearTime, disappearTime, containerColor, sliderColor) {
         const container = new Graphics()
             .moveTo(x0, y0)
             .bezierCurveTo(x1, y1, x2, y2, x3, y3)
@@ -146,7 +148,7 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
             }
 
             // Only move if within the container and not on the same pos as before
-            if (closestT === t || Math.sqrt(closestDist) > 50) return;
+            if (closestT === t || closestDist > containerRadius * containerRadius) return;
 
             // Move the slider accordingly
             t = closestT;
