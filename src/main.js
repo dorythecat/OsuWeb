@@ -214,15 +214,6 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         });
     }
 
-    /*addSlider(50, 30,
-        200, 200, 200, 200,
-        500, 400, 500, 200,
-        0, 10, 10,
-        "0x333333", "0x000000");*/
-
-    // Add initial circle
-    //addCircle(50, 200, 200, 0, 10, "black");
-
     // Start screen
     const startText = new Text({
         text: "Click to Start",
@@ -248,7 +239,28 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         app.stage.addChild(scoreText);
         app.stage.addChild(multiplierText);
 
-        // TODO: Add circles and sliders that match the music's rythm
+        addCircle(50, 200, 200, 0, 8, "0x000000");
+        addCircle(50, 300, 300, 10, 10, "0x000000");
+        addCircle(50, 400, 400, 11, 10, "0x000000");
+        addCircle(50, 300, 300, 22, 10, "0x000000");
+        addCircle(50, 200, 200, 23, 10, "0x000000");
+        addCircle(50, 600, 600, 35, 10, "0x000000");
+        addCircle(50, 500, 500, 37, 10, "0x000000");
+        addCircle(50, 400, 300, 39, 10, "0x000000");
+        addCircle(50, 300, 400, 40, 10, "0x000000");
+        addCircle(50, 200, 600, 58, 10, "0x000000");
+        addCircle(50, 300, 500, 59, 10, "0x000000");
+        addCircle(50, 200, 400, 60, 10, "0x000000");
+        addCircle(50, 200, 200, 70, 10, "0x000000");
+        addCircle(50, 200, 350, 71, 10, "0x000000");
+        addCircle(50, 200, 500, 72, 10, "0x000000");
+        addCircle(50, 500, 500, 83, 10, "0x000000");
+        addCircle(50, 500, 600, 84, 10, "0x000000");
+        addCircle(50, 500, 700, 85, 10, "0x000000");
+        addCircle(50, 400, 700, 86, 10, "0x000000");
+        addCircle(50, 400, 600, 87, 10, "0x000000");
+        addCircle(50, 400, 500, 88, 10, "0x000000");
+        addCircle(50, 200, 200, 90, 10, "0x000000");
     }
 
     app.stage.on('pointerdown', startGame);
