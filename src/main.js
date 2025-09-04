@@ -1,4 +1,5 @@
 import { Application, Graphics, Text, TextStyle } from "pixi.js";
+import { Sound } from "@pixi/sound";
 
 const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
 
@@ -8,6 +9,14 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
 
     // Initialize the application
     await app.init({ background: "#1099bb", resizeTo: window });
+
+    const music = await Sound.from({
+        url: "music.wav",
+        autoPlay: true,
+        loop: false,
+        volume: 0.5
+    });
+    music.play();
 
     // Append the application canvas to the document body
     document.getElementById("pixi-container").appendChild(app.canvas);
