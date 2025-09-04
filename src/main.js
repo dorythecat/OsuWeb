@@ -12,11 +12,10 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
 
     const music = await Sound.from({
         url: "music.wav",
-        autoPlay: true,
+        autoPlay: false,
         loop: false,
         volume: 0.5
     });
-    music.play();
 
     // Append the application canvas to the document body
     document.getElementById("pixi-container").appendChild(app.canvas);
@@ -44,9 +43,6 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
 
     scoreText.x = scoreText.y = multiplierText.x = 10;
     multiplierText.y = 40;
-
-    app.stage.addChild(scoreText);
-    app.stage.addChild(multiplierText);
 
     app.ticker.add((ticker) => {
         if (multiplier === 1) return;
@@ -218,12 +214,42 @@ const BEZIER_STEPS = 64; // Number of steps to approximate the Bézier curve
         });
     }
 
-    addSlider(50, 30,
+    /*addSlider(50, 30,
         200, 200, 200, 200,
         500, 400, 500, 200,
         0, 10, 10,
-        "0x333333", "0x000000");
+        "0x333333", "0x000000");*/
 
     // Add initial circle
     //addCircle(50, 200, 200, 0, 10, "black");
+
+    // Start screen
+    const startText = new Text({
+        text: "Click to Start",
+        style: new TextStyle({
+            fontFamily: "Arial",
+            fontSize: 70,
+            fill: 0xffffff,
+            stroke: 0x000000,
+            strokeThickness: 8,
+        })
+    });
+    startText.anchor.set(0.5);
+    startText.x = app.screen.width / 2;
+    startText.y = app.screen.height / 2;
+    app.stage.addChild(startText);
+
+    function startGame() {
+        app.stage.off('pointerdown', startGame);
+        app.stage.removeChild(startText);
+        setTimeout(() => { music.play() }, 1000); // Delay music start by 1 second
+
+        // Add score and multiplier text
+        app.stage.addChild(scoreText);
+        app.stage.addChild(multiplierText);
+
+        // TODO: Add circles and sliders that match the music's rythm
+    }
+
+    app.stage.on('pointerdown', startGame);
 })();
